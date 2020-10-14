@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-const Img = styled.img``;
 interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   placeholderImg?: string;
+  errorImg?: string;
 }
-export default ({ src, placeholderImg, ...props }: ImageProps) => {
+export default ({ src, placeholderImg, errorImg, ...props }: ImageProps) => {
   const [imgSrc, setSrc] = useState(placeholderImg || src);
   useEffect(() => {
     const img = new Image();
@@ -13,8 +12,8 @@ export default ({ src, placeholderImg, ...props }: ImageProps) => {
       setSrc(src);
     });
     img.addEventListener("error", () => {
-      setSrc(placeholderImg);
+      setSrc(errorImg || placeholderImg);
     });
-  }, [src, placeholderImg]);
-  return <Img {...props} src={imgSrc} />;
+  }, [src, placeholderImg, errorImg]);
+  return <img {...props} src={imgSrc} />;
 };
